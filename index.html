@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Eagle Creek Map</title>
+    <link rel="stylesheet" href="css/font-awesome-4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="dist/css/style-min.css">
+
+</head>
+
+<body>
+    <nav id="drawer">
+        <div id="searchmenu">
+            <div id="project">
+                <h4>Eagle Creek Park Map</h4>
+                <h5>and other Indy attractions...</h5>
+            </div>
+            <input id="searchbox" placeholder="Search..." type="search" data-bind="textInput: query"></input>
+            <div id="menu">
+                <ul data-bind="foreach: search()" id="list">
+                    <a>
+                        <li data-bind="text: $data.title, click: $parent.setLocation"></li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+    <a id="menuIcon">
+        <img class="burger" src="dist/images/menu-alt-min.png" alt="burger menu" height="40" width="40">
+        <h4 id="searchText">Search</h4>
+    </a>
+    <main id="map"></main>
+
+
+
+    <script type="text/javascript" src="dist/js/jquery-3.1.1.min-min.js"></script>
+    <script type="text/javascript" src="dist/js/knockout-3.4.0-min.js"></script>
+    <script src="dist/js/app-min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnaEWPmbB-1FHzO0aVoRK-KiHtz8p59g4&callback=initMap" async defer>
+    </script>
+
+
+
+
+</body>
+
+</html>
