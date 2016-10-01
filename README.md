@@ -14,6 +14,7 @@ A list view of the locations is aligned to the left of the page. Locations can b
 3. [Mozilla Developer Network](https://developer.mozilla.org/en-US/ "https://developer.mozilla.org/en-US/")
 4. [Benoheads's Software Blog](https://benohead.com/javascript-variables-asynchronous-callback-functions/ "https://benohead.com/javascript-variables-asynchronous-callback-functions/")
 5. [Knock Me Out](http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html "http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html")
+6. [w3schools.com](http://www.w3schools.com/jsref/prop_element_classlist.asp "http://www.w3schools.com/jsref/prop_element_classlist.asp")
 
 ### Development Tools Used
 1. [Atom](https://atom.io/ "https://atom.io/") version 1.10.2
