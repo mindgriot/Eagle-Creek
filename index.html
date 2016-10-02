@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <nav id="drawer">
+    <nav id="drawer" data-bind="visible: showRow">
         <div id="searchmenu">
             <div id="project">
                 <h4>Eagle Creek Park Map</h4>
@@ -25,10 +25,13 @@
                     </a>
                 </ul>
             </div>
+            <div>
+                <button id="hide" data-bind="click: toggleHide" type="button">Close menu</button>
+            </div>
         </div>
 
     </nav>
-    <a id="menuIcon">
+    <a id="menuIcon" data-bind="click: toggleVisibility">
         <img class="burger" src="dist/images/menu-alt-min.png" alt="burger menu" height="40" width="40">
         <h4 id="searchText">Search</h4>
     </a>

@@ -83,6 +83,9 @@ li:hover {
     #menuIcon {
       width: 0;
     }
+    #hide {
+      display: none;
+    }
 }
 
 @media screen and (max-width: 599px) {
@@ -99,10 +102,19 @@ li:hover {
       margin-bottom: 0;
       text-align: center;
     }
+    #hide {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    }
 }
 
 img.burger {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+a[href*="undefined"] {
+  display: none;
 }

@@ -30,8 +30,8 @@ var nearbyLocations = [{
     "url": "eaglecreekgolfclub.com/",
     "wiki": "Eagle_Creek_Park",
     "markerID": "2",
-    "lat": 39.856070,
-    "lng": -86.320290
+    "lat": 39.852365,
+    "lng": -86.318492
 }, {
     "title": "Colts Training Facility",
     "street": "7001 W 56th St.",
@@ -66,8 +66,8 @@ var nearbyLocations = [{
     "url": "www.indplsartcenter.org/",
     "wiki": "Indianapolis_Art_Center",
     "markerID": "6",
-    "lat": 39.877807,
-    "lng": -86.143639
+    "lat": 39.878026,
+    "lng": -86.143631
 }, {
     "title": "Indianapolis Zoo",
     "street": "1200 W Washington St.",
@@ -91,6 +91,22 @@ var viewModel = function() {
     self.setLocation = function(clickedLocation) {
         self.currentLocation(clickedLocation);
         google.maps.event.trigger(clickedLocation.marker, 'click');
+    };
+
+    // Open list menu
+    self.showRow = ko.observable(false);
+    self.toggleVisibility = function() {
+        var drawer = document.querySelector('#drawer');
+        self.showRow(self.showRow());
+        drawer.classList.toggle('open');
+    };
+
+    //Close list menu
+    self.showRow = ko.observable(true);
+    self.toggleHide = function() {
+        var drawer = document.querySelector('#drawer');
+        self.showRow(self.showRow());
+        drawer.classList.remove('open');
     };
 
     // Search filter
@@ -237,7 +253,6 @@ function initMap() {
 
     bounds = new google.maps.LatLngBounds();
 
-    var infowindow = new google.maps.InfoWindow();
 
     function makeMarker(location) {
 
@@ -245,44 +260,43 @@ function initMap() {
         var clientID = "EWDIWXWFSZ0QTCQ5JG2UV0O4NLXYIKLZJ35QEK4OKDDLMBJN";
         var clientSecret = "KB3JYUOSBLA4A2Y2U0QO3TH2JQ4YF0PQJSEVIXL11JCQVBMA";
         var foursquareURL = 'https://api.foursquare.com/v2/venues/search?limit=1&ll=' + location.lat + ',' + location.lng + '&client_id=' + clientID + '&client_secret=' + clientSecret + '&v=20160930';
-        var fsRequestTimeout = setTimeout(function() {
-            alert("Failed to get FourSquare resources");
-        }, 8000);
 
         $.ajax({
             type: "GET",
             url: foursquareURL,
             cache: true,
             dataType: 'jsonp',
-            success: function(data) {
-                location.results = data.response.venues[0].url;
-                console.log(data);
-                clearTimeout(fsRequestTimeout);
-            },
+        }).done(function(data) {
 
+            location.results = data.response.venues[0].url;
+            console.log(data);
+
+        }).fail(function(jqXHR, textStatus) {
+            alert("Sorry FourSquare Ajax request failed...(" + textStatus + ' - ' + jqXHR.responseText + ").");
         });
+
+
+
 
         var wiki_title = location.wiki;
         var wikiUrl = 'http://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrsearch=' + wiki_title + '&gsrprop=snippet&prop=info&inprop=url&callback=wikiCallback';
-        var wikiRequestTimeout = setTimeout(function() {
-            alert("Failed to get Wikipedia resources");
-        }, 8000);
 
         $.ajax({
             type: "GET",
             url: wikiUrl,
             cache: true,
             dataType: 'jsonp',
-            success: function(data) {
-                var pages = data.query.pages;
-                //Object keys are need for the way Wikipedia wraps its API data
-                var firstPage = pages[Object.keys(pages)[0]];
-                location.wikiTitle = firstPage.canonicalurl;
-                console.log(location.wikiTitle);
-                clearTimeout(wikiRequestTimeout);
-            },
+        }).done(function(data) {
+            var pages = data.query.pages;
+            //Object keys are needed for the way Wikipedia wraps its API data
+            var firstPage = pages[Object.keys(pages)[0]];
+            location.wikiTitle = firstPage.canonicalurl;
+            console.log(location.wikiTitle);
 
+        }).fail(function(jqXHR, textStatus) {
+            alert("Sorry Wikipedia Ajax request failed... (" + textStatus + ' - ' + jqXHR.responseText + ").");
         });
+
 
         var latlng = new google.maps.LatLng(location.lat, location.lng);
         var title = location.title;
@@ -332,6 +346,7 @@ function initMap() {
                 '" target="_blank"><i class="fa fa-wikipedia-w" aria-hidden="true"></i>  ' + location.wikiTitle + '</a>';
 
             infowindow.setContent(contentString); {
+
                 //Close active window if one exists
                 if (activeWindow != null)
                     activeWindow.close();
@@ -346,6 +361,7 @@ function initMap() {
             } else if (windowWidth > 1080) {
                 map.getZoom(17);
             }
+
             map.setCenter(location.marker.getPosition());
             toggleBounce(location.marker);
             // alert("click");
@@ -362,7 +378,7 @@ function initMap() {
             marker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function() {
                 marker.setAnimation(null);
-            }, 550);
+            }, 1400);
         }
     }
     // Loops the makeMarker function for the length of the nearbyLocations array and keeps object information specific to its own marker
@@ -370,23 +386,17 @@ function initMap() {
         nearbyLocations[i].marker = makeMarker(nearbyLocations[i]);
     }
 
-    map.fitBounds(bounds);
+    window.onresize = function() {
+        map.fitBounds(bounds);
+    }
 
     //  Activate knockout bindings
     ko.applyBindings(new viewModel());
 
+    function googleError() {
+        if (typeof(google) === null) {
+            alert("Sorry, Google Maps is currently unavailable. Please try later.");
+        }
+    }
+
 }
-
-//When menu is visible on mobile the drawer will open
-var menu = document.querySelector('#menuIcon');
-var main = document.querySelector('main');
-var drawer = document.querySelector('#drawer');
-
-menu.addEventListener('click', function(e) {
-    drawer.classList.toggle('open');
-    e.stopPropagation();
-});
-
-main.addEventListener('click', function() {
-    drawer.classList.remove('open');
-});
