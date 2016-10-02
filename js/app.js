@@ -1,5 +1,5 @@
 /*jslint node: true */
-/*global document, window, alert, console, require, $*/
+/*global document, window, alert, console, google, ko, require, $*/
 "use strict";
 var activeWindow;
 var windowWidth = document.documentElement.clientWidth;
@@ -388,15 +388,9 @@ function initMap() {
 
     window.onresize = function() {
         map.fitBounds(bounds);
-    }
+    };
 
     //  Activate knockout bindings
     ko.applyBindings(new viewModel());
-
-    function googleError() {
-        if (typeof(google) === null) {
-            alert("Sorry, Google Maps is currently unavailable. Please try later.");
-        }
-    }
 
 }
